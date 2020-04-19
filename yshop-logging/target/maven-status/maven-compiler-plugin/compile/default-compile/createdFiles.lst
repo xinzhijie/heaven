@@ -1,0 +1,14 @@
+co\yixiang\domain\Log.class
+co\yixiang\service\dto\LogQueryCriteria.class
+co\yixiang\service\LogService.class
+co\yixiang\aop\log\Log.class
+co\yixiang\service\dto\LogErrorDTO.class
+co\yixiang\service\dto\LogSmallDTO.class
+co\yixiang\service\mapper\LogSmallMapper.class
+co\yixiang\service\mapper\LogErrorMapperImpl.class
+co\yixiang\service\mapper\LogSmallMapperImpl.class
+co\yixiang\aspect\LogAspect.class
+co\yixiang\rest\LogController.class
+co\yixiang\service\mapper\LogErrorMapper.class
+co\yixiang\repository\LogRepository.class
+co\yixiang\service\impl\LogServiceImpl.class
