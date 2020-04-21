@@ -5,9 +5,9 @@ import co.yixiang.modules.mnt.service.ServerDeployService;
 import co.yixiang.modules.mnt.service.dto.ServerDeployDto;
 import co.yixiang.modules.mnt.service.dto.ServerDeployQueryCriteria;
 import co.yixiang.modules.mnt.util.ExecuteShellUtil;
-import co.yixiang.utils.FileUtil;
+
 import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
+
 import co.yixiang.utils.ValidationUtil;
 import co.yixiang.modules.mnt.repository.ServerDeployRepository;
 import co.yixiang.modules.mnt.service.mapper.ServerDeployMapper;
@@ -32,25 +32,21 @@ public class ServerDeployServiceImpl implements ServerDeployService {
 
     private ServerDeployMapper serverDeployMapper;
 
-    public ServerDeployServiceImpl(ServerDeployRepository serverDeployRepository,ServerDeployMapper serverDeployMapper){
-    	this.serverDeployRepository = serverDeployRepository;
-    	this.serverDeployMapper = serverDeployMapper;
-	}
 
     @Override
     public Object queryAll(ServerDeployQueryCriteria criteria, Pageable pageable){
-        Page<ServerDeploy> page = serverDeployRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        Page<ServerDeploy> page = null;//serverDeployRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         return PageUtil.toPage(page.map(serverDeployMapper::toDto));
     }
 
     @Override
     public List<ServerDeployDto> queryAll(ServerDeployQueryCriteria criteria){
-        return serverDeployMapper.toDto(serverDeployRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return null;//serverDeployMapper.toDto(serverDeployRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     public ServerDeployDto findById(Long id) {
-        ServerDeploy server = serverDeployRepository.findById(id).orElseGet(ServerDeploy::new);
+        ServerDeploy server = null;//serverDeployRepository.findById(id).orElseGet(ServerDeploy::new);
         ValidationUtil.isNull(server.getId(),"ServerDeploy","id",id);
         return serverDeployMapper.toDto(server);
     }
@@ -79,23 +75,23 @@ public class ServerDeployServiceImpl implements ServerDeployService {
 	@Override
     @Transactional(rollbackFor = Exception.class)
     public ServerDeployDto create(ServerDeploy resources) {
-		return serverDeployMapper.toDto(serverDeployRepository.save(resources));
+		return null;//serverDeployMapper.toDto(serverDeployRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(ServerDeploy resources) {
-        ServerDeploy serverDeploy = serverDeployRepository.findById(resources.getId()).orElseGet(ServerDeploy::new);
+        ServerDeploy serverDeploy = null;//serverDeployRepository.findById(resources.getId()).orElseGet(ServerDeploy::new);
         ValidationUtil.isNull( serverDeploy.getId(),"ServerDeploy","id",resources.getId());
 		serverDeploy.copy(resources);
-        serverDeployRepository.save(serverDeploy);
+//        serverDeployRepository.save(serverDeploy);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Set<Long> ids) {
         for (Long id : ids) {
-            serverDeployRepository.deleteById(id);
+//            serverDeployRepository.deleteById(id);
         }
     }
 
@@ -111,6 +107,6 @@ public class ServerDeployServiceImpl implements ServerDeployService {
             map.put("创建日期", deployDto.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+//        FileUtil.downloadExcel(list, response);
     }
 }

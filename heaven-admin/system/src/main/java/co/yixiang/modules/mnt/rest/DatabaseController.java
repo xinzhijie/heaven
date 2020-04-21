@@ -1,8 +1,8 @@
 package co.yixiang.modules.mnt.rest;
 
-import co.yixiang.aop.log.Log;
+
 import co.yixiang.exception.BadRequestException;
-import co.yixiang.utils.FileUtil;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import co.yixiang.modules.mnt.domain.Database;
@@ -40,7 +40,7 @@ public class DatabaseController {
         this.databaseService = databaseService;
     }
 
-	@Log("导出数据库数据")
+
 	@ApiOperation("导出数据库数据")
 	@GetMapping(value = "/download")
 	@PreAuthorize("@el.check('admin','database:list')")
@@ -48,7 +48,7 @@ public class DatabaseController {
 		databaseService.download(databaseService.queryAll(criteria), response);
 	}
 
-    @Log("查询数据库")
+
     @ApiOperation(value = "查询数据库")
     @GetMapping
 	@PreAuthorize("@el.check('admin','database:list')")
@@ -56,7 +56,7 @@ public class DatabaseController {
         return new ResponseEntity<>(databaseService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("新增数据库")
+
     @ApiOperation(value = "新增数据库")
     @PostMapping
 	@PreAuthorize("@el.check('admin','database:add')")
@@ -64,7 +64,6 @@ public class DatabaseController {
         return new ResponseEntity<>(databaseService.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改数据库")
     @ApiOperation(value = "修改数据库")
     @PutMapping
 	@PreAuthorize("@el.check('admin','database:edit')")
@@ -73,7 +72,7 @@ public class DatabaseController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除数据库")
+
     @ApiOperation(value = "删除数据库")
     @DeleteMapping
 	@PreAuthorize("@el.check('admin','database:del')")
@@ -82,7 +81,6 @@ public class DatabaseController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-	@Log("测试数据库链接")
 	@ApiOperation(value = "测试数据库链接")
 	@PostMapping("/testConnect")
 	@PreAuthorize("@el.check('admin','database:testConnect')")
@@ -90,7 +88,6 @@ public class DatabaseController {
 		return new ResponseEntity<>(databaseService.testConnection(resources),HttpStatus.CREATED);
 	}
 
-	@Log("执行SQL脚本")
 	@ApiOperation(value = "执行SQL脚本")
 	@PostMapping(value = "/upload")
 	@PreAuthorize("@el.check('admin','database:add')")
@@ -101,7 +98,7 @@ public class DatabaseController {
 		if(database != null){
 			fileName = file.getOriginalFilename();
 			File executeFile = new File(fileSavePath+fileName);
-			FileUtil.del(executeFile);
+//			FileUtil.del(executeFile);
 			file.transferTo(executeFile);
 			String result = SqlUtils.executeFile(database.getJdbcUrl(), database.getUserName(), database.getPwd(), executeFile);
 			return new ResponseEntity<>(result,HttpStatus.OK);

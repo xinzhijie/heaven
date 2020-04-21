@@ -8,7 +8,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import co.yixiang.annotation.AnonymousAccess;
-import co.yixiang.aop.log.Log;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.security.config.SecurityProperties;
 import co.yixiang.modules.security.security.TokenProvider;
@@ -66,7 +65,6 @@ public class AuthController {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
 
-    @Log("用户登录")
     @ApiOperation("登录授权")
     @AnonymousAccess
     @PostMapping(value = "/login")

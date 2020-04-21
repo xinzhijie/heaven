@@ -1,7 +1,7 @@
 package co.yixiang.modules.system.rest;
 
 import cn.hutool.core.util.StrUtil;
-import co.yixiang.aop.log.Log;
+
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.system.domain.DictDetail;
 import co.yixiang.modules.system.service.DictDetailService;
@@ -37,7 +37,6 @@ public class DictDetailController {
         this.dictDetailService = dictDetailService;
     }
 
-    @Log("查询字典详情")
     @ApiOperation("查询字典详情")
     @GetMapping
     public ResponseEntity<Object> getDictDetails(DictDetailQueryCriteria criteria,
@@ -45,7 +44,6 @@ public class DictDetailController {
         return new ResponseEntity<>(dictDetailService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("查询多个字典详情")
     @ApiOperation("查询多个字典详情")
     @GetMapping(value = "/map")
     public ResponseEntity<Object> getDictDetailMaps(DictDetailQueryCriteria criteria,
@@ -59,7 +57,6 @@ public class DictDetailController {
         return new ResponseEntity<>(map,HttpStatus.OK);
     }
 
-    @Log("新增字典详情")
     @ApiOperation("新增字典详情")
     @PostMapping
     @PreAuthorize("@el.check('admin','dict:add')")
@@ -70,7 +67,6 @@ public class DictDetailController {
         return new ResponseEntity<>(dictDetailService.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改字典详情")
     @ApiOperation("修改字典详情")
     @PutMapping
     @PreAuthorize("@el.check('admin','dict:edit')")
@@ -80,7 +76,6 @@ public class DictDetailController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除字典详情")
     @ApiOperation("删除字典详情")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("@el.check('admin','dict:del')")

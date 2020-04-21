@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yixiang.dao.JobMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yixiang.entity.Job">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="enabled" property="enabled" />
+        <result column="sort" property="sort" />
+        <result column="dept_id" property="deptId" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, enabled, sort, dept_id, create_time
+    </sql>
+
+</mapper>

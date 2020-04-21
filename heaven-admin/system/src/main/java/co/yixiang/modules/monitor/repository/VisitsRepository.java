@@ -1,8 +1,6 @@
 package co.yixiang.modules.monitor.repository;
 
 import co.yixiang.modules.monitor.domain.Visits;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
@@ -11,7 +9,7 @@ import java.util.List;
  * @date 2018-12-13
  */
 @Repository
-public interface VisitsRepository extends JpaRepository<Visits,Long> {
+public interface VisitsRepository{
 
     /**
      * findByDate
@@ -26,6 +24,6 @@ public interface VisitsRepository extends JpaRepository<Visits,Long> {
      * @param date2 日期2
      * @return List
      */
-    @Query(value = "select * FROM visits where create_time between ?1 and ?2",nativeQuery = true)
+//    @Query(value = "select * FROM visits where create_time between ?1 and ?2",nativeQuery = true)
     List<Visits> findAllVisits(String date1, String date2);
 }

@@ -6,9 +6,8 @@ import co.yixiang.modules.mnt.service.DeployHistoryService;
 import co.yixiang.modules.mnt.service.dto.DeployHistoryDto;
 import co.yixiang.modules.mnt.service.dto.DeployHistoryQueryCriteria;
 import co.yixiang.modules.mnt.service.mapper.DeployHistoryMapper;
-import co.yixiang.utils.FileUtil;
+
 import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
 import co.yixiang.utils.ValidationUtil;
 import co.yixiang.modules.mnt.repository.DeployHistoryRepository;
 import org.springframework.data.domain.Page;
@@ -29,29 +28,26 @@ import java.util.*;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class DeployHistoryServiceImpl implements DeployHistoryService {
 
-    private final DeployHistoryRepository deployhistoryRepository;
+    private DeployHistoryRepository deployhistoryRepository;
 
-    private final DeployHistoryMapper deployhistoryMapper;
+    private DeployHistoryMapper deployhistoryMapper;
 
-    public DeployHistoryServiceImpl(DeployHistoryRepository deployhistoryRepository, DeployHistoryMapper deployhistoryMapper) {
-        this.deployhistoryRepository = deployhistoryRepository;
-        this.deployhistoryMapper = deployhistoryMapper;
-    }
+
 
     @Override
     public Object queryAll(DeployHistoryQueryCriteria criteria, Pageable pageable){
-        Page<DeployHistory> page = deployhistoryRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        Page<DeployHistory> page = null;//deployhistoryRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         return PageUtil.toPage(page.map(deployhistoryMapper::toDto));
     }
 
     @Override
     public List<DeployHistoryDto> queryAll(DeployHistoryQueryCriteria criteria){
-        return deployhistoryMapper.toDto(deployhistoryRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return null;//deployhistoryMapper.toDto(deployhistoryRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     public DeployHistoryDto findById(String id) {
-        DeployHistory deployhistory = deployhistoryRepository.findById(id).orElseGet(DeployHistory::new);
+        DeployHistory deployhistory = null;//deployhistoryRepository.findById(id).orElseGet(DeployHistory::new);
         ValidationUtil.isNull(deployhistory.getId(),"DeployHistory","id",id);
         return deployhistoryMapper.toDto(deployhistory);
     }
@@ -60,14 +56,14 @@ public class DeployHistoryServiceImpl implements DeployHistoryService {
     @Transactional(rollbackFor = Exception.class)
     public DeployHistoryDto create(DeployHistory resources) {
         resources.setId(IdUtil.simpleUUID());
-        return deployhistoryMapper.toDto(deployhistoryRepository.save(resources));
+        return null;//deployhistoryMapper.toDto(deployhistoryRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Set<String> ids) {
         for (String id : ids) {
-            deployhistoryRepository.deleteById(id);
+//            deployhistoryRepository.deleteById(id);
         }
     }
 
@@ -83,6 +79,6 @@ public class DeployHistoryServiceImpl implements DeployHistoryService {
             map.put("部署人员", deployHistoryDto.getDeployUser());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+//        FileUtil.downloadExcel(list, response);
     }
 }

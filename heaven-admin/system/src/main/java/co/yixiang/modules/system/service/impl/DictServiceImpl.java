@@ -8,9 +8,9 @@ import co.yixiang.modules.system.service.dto.DictDTO;
 import co.yixiang.modules.system.service.dto.DictDetailDTO;
 import co.yixiang.modules.system.service.dto.DictQueryCriteria;
 import co.yixiang.modules.system.service.mapper.DictMapper;
-import co.yixiang.utils.FileUtil;
+
 import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
+
 import co.yixiang.utils.ValidationUtil;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -37,32 +37,28 @@ import java.util.Map;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class DictServiceImpl implements DictService {
 
-    private final DictRepository dictRepository;
+    private  DictRepository dictRepository;
 
-    private final DictMapper dictMapper;
+    private  DictMapper dictMapper;
 
-    public DictServiceImpl(DictRepository dictRepository, DictMapper dictMapper) {
-        this.dictRepository = dictRepository;
-        this.dictMapper = dictMapper;
-    }
 
     @Override
     @Cacheable
     public Map<String, Object> queryAll(DictQueryCriteria dict, Pageable pageable){
-        Page<Dict> page = dictRepository.findAll((root, query, cb) -> QueryHelp.getPredicate(root, dict, cb), pageable);
+        Page<Dict> page = null;//dictRepository.findAll((root, query, cb) -> QueryHelp.getPredicate(root, dict, cb), pageable);
         return PageUtil.toPage(page.map(dictMapper::toDto));
     }
 
     @Override
     public List<DictDTO> queryAll(DictQueryCriteria dict) {
-        List<Dict> list = dictRepository.findAll((root, query, cb) -> QueryHelp.getPredicate(root, dict, cb));
+        List<Dict> list = null;//dictRepository.findAll((root, query, cb) -> QueryHelp.getPredicate(root, dict, cb));
         return dictMapper.toDto(list);
     }
 
     @Override
     @Cacheable(key = "#p0")
     public DictDTO findById(Long id) {
-        Dict dict = dictRepository.findById(id).orElseGet(Dict::new);
+        Dict dict = null;//dictRepository.findById(id).orElseGet(Dict::new);
         ValidationUtil.isNull(dict.getId(),"Dict","id",id);
         return dictMapper.toDto(dict);
     }
@@ -71,24 +67,25 @@ public class DictServiceImpl implements DictService {
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public DictDTO create(Dict resources) {
-        return dictMapper.toDto(dictRepository.save(resources));
+//        return dictMapper.toDto(dictRepository.save(resources));
+        return null;
     }
 
     @Override
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void update(Dict resources) {
-        Dict dict = dictRepository.findById(resources.getId()).orElseGet(Dict::new);
+        Dict dict =null; //dictRepository.findById(resources.getId()).orElseGet(Dict::new);
         ValidationUtil.isNull( dict.getId(),"Dict","id",resources.getId());
         resources.setId(dict.getId());
-        dictRepository.save(resources);
+//        dictRepository.save(resources);
     }
 
     @Override
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        dictRepository.deleteById(id);
+//        dictRepository.deleteById(id);
     }
 
     @Override
@@ -115,6 +112,6 @@ public class DictServiceImpl implements DictService {
                 list.add(map);
             }
         }
-        FileUtil.downloadExcel(list, response);
+//        FileUtil.downloadExcel(list, response);
     }
 }

@@ -1,6 +1,6 @@
 package co.yixiang.modules.mnt.rest;
 
-import co.yixiang.aop.log.Log;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import co.yixiang.modules.mnt.domain.App;
@@ -31,7 +31,7 @@ public class AppController {
         this.appService = appService;
     }
 
-    @Log("导出应用数据")
+
     @ApiOperation("导出应用数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('admin','app:list')")
@@ -39,7 +39,7 @@ public class AppController {
         appService.download(appService.queryAll(criteria), response);
     }
 
-    @Log("查询应用")
+
     @ApiOperation(value = "查询应用")
     @GetMapping
 	@PreAuthorize("@el.check('admin','app:list')")
@@ -47,7 +47,7 @@ public class AppController {
         return new ResponseEntity<>(appService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("新增应用")
+
     @ApiOperation(value = "新增应用")
     @PostMapping
 	@PreAuthorize("@el.check('admin','app:add')")
@@ -55,7 +55,7 @@ public class AppController {
         return new ResponseEntity<>(appService.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改应用")
+
     @ApiOperation(value = "修改应用")
     @PutMapping
 	@PreAuthorize("@el.check('admin','app:edit')")
@@ -64,7 +64,7 @@ public class AppController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除应用")
+
     @ApiOperation(value = "删除应用")
 	@DeleteMapping
 	@PreAuthorize("@el.check('admin','app:del')")

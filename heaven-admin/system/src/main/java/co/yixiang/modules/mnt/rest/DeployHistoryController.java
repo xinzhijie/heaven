@@ -1,6 +1,6 @@
 package co.yixiang.modules.mnt.rest;
 
-import co.yixiang.aop.log.Log;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import co.yixiang.modules.mnt.service.DeployHistoryService;
@@ -29,7 +29,7 @@ public class DeployHistoryController {
         this.deployhistoryService = deployhistoryService;
     }
 
-    @Log("导出部署历史数据")
+
     @ApiOperation("导出部署历史数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('admin','deployHistory:list')")
@@ -37,7 +37,7 @@ public class DeployHistoryController {
         deployhistoryService.download(deployhistoryService.queryAll(criteria), response);
     }
 
-    @Log("查询部署历史")
+
     @ApiOperation(value = "查询部署历史")
     @GetMapping
 	@PreAuthorize("@el.check('admin','deployHistory:list')")
@@ -45,7 +45,7 @@ public class DeployHistoryController {
         return new ResponseEntity<>(deployhistoryService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("删除DeployHistory")
+
     @ApiOperation(value = "删除部署历史")
 	@DeleteMapping
     @PreAuthorize("@el.check('admin','deployHistory:del')")

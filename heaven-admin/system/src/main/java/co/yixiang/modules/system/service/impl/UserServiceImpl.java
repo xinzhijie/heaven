@@ -38,39 +38,34 @@ import java.util.stream.Collectors;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
-    private final RedisUtils redisUtils;
-    private final UserAvatarRepository userAvatarRepository;
+    private  UserRepository userRepository;
+    private  UserMapper userMapper;
+    private  RedisUtils redisUtils;
+    private  UserAvatarRepository userAvatarRepository;
 
     @Value("${file.avatar}")
     private String avatar;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, RedisUtils redisUtils, UserAvatarRepository userAvatarRepository) {
-        this.userRepository = userRepository;
-        this.userMapper = userMapper;
-        this.redisUtils = redisUtils;
-        this.userAvatarRepository = userAvatarRepository;
-    }
+
 
     @Override
     @Cacheable
     public Object queryAll(UserQueryCriteria criteria, Pageable pageable) {
-        Page<User> page = userRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        Page<User> page = null;//userRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         return PageUtil.toPage(page.map(userMapper::toDto));
     }
 
     @Override
     @Cacheable
     public List<UserDTO> queryAll(UserQueryCriteria criteria) {
-        List<User> users = userRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder));
+        List<User> users = null;//userRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder));
         return userMapper.toDto(users);
     }
 
     @Override
     @Cacheable(key = "#p0")
     public UserDTO findById(long id) {
-        User user = userRepository.findById(id).orElseGet(User::new);
+        User user = null;//userRepository.findById(id).orElseGet(User::new);
         ValidationUtil.isNull(user.getId(),"User","id",id);
         return userMapper.toDto(user);
     }
@@ -85,14 +80,14 @@ public class UserServiceImpl implements UserService {
         if(userRepository.findByEmail(resources.getEmail())!=null){
             throw new EntityExistException(User.class,"email",resources.getEmail());
         }
-        return userMapper.toDto(userRepository.save(resources));
+        return null;//userMapper.toDto(userRepository.save(resources));
     }
 
     @Override
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void update(User resources) {
-        User user = userRepository.findById(resources.getId()).orElseGet(User::new);
+        User user = null;//userRepository.findById(resources.getId()).orElseGet(User::new);
         ValidationUtil.isNull(user.getId(),"User","id",resources.getId());
         User user1 = userRepository.findByUsername(user.getUsername());
         User user2 = userRepository.findByEmail(user.getEmail());
@@ -122,18 +117,18 @@ public class UserServiceImpl implements UserService {
         user.setPhone(resources.getPhone());
         user.setNickName(resources.getNickName());
         user.setSex(resources.getSex());
-        userRepository.save(user);
+//        userRepository.save(user);
     }
 
     @Override
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void updateCenter(User resources) {
-        User user = userRepository.findById(resources.getId()).orElseGet(User::new);
+        User user = null;//userRepository.findById(resources.getId()).orElseGet(User::new);
         user.setNickName(resources.getNickName());
         user.setPhone(resources.getPhone());
         user.setSex(resources.getSex());
-        userRepository.save(user);
+//        userRepository.save(user);
     }
 
     @Override
@@ -141,7 +136,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(Set<Long> ids) {
         for (Long id : ids) {
-            userRepository.deleteById(id);
+//            userRepository.deleteById(id);
         }
     }
 
@@ -178,13 +173,13 @@ public class UserServiceImpl implements UserService {
         if(userAvatar != null){
            oldPath = userAvatar.getPath();
         }
-        File file = FileUtil.upload(multipartFile, avatar);
+        File file = null;//FileUtil.upload(multipartFile, avatar);
         assert file != null;
-        userAvatar = userAvatarRepository.save(new UserAvatar(userAvatar,file.getName(), file.getPath(), FileUtil.getSize(multipartFile.getSize())));
+        userAvatar = null;//userAvatarRepository.save(new UserAvatar(userAvatar,file.getName(), file.getPath(), FileUtil.getSize(multipartFile.getSize())));
         user.setUserAvatar(userAvatar);
-        userRepository.save(user);
+//        userRepository.save(user);
         if(StringUtils.isNotBlank(oldPath)){
-            FileUtil.del(oldPath);
+//            FileUtil.del(oldPath);
         }
     }
 
@@ -213,6 +208,6 @@ public class UserServiceImpl implements UserService {
             map.put("创建日期", userDTO.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+//        FileUtil.downloadExcel(list, response);
     }
 }

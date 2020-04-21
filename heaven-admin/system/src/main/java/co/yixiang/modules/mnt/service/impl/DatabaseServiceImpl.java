@@ -6,9 +6,9 @@ import co.yixiang.modules.mnt.service.DatabaseService;
 import co.yixiang.modules.mnt.service.dto.DatabaseDto;
 import co.yixiang.modules.mnt.service.dto.DatabaseQueryCriteria;
 import co.yixiang.modules.mnt.util.SqlUtils;
-import co.yixiang.utils.FileUtil;
+
 import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
+
 import co.yixiang.utils.ValidationUtil;
 import lombok.extern.slf4j.Slf4j;
 import co.yixiang.modules.mnt.repository.DatabaseRepository;
@@ -36,25 +36,22 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     private DatabaseMapper databaseMapper;
 
-    public DatabaseServiceImpl(DatabaseRepository databaseRepository,DatabaseMapper databaseMapper){
-    	this.databaseMapper = databaseMapper;
-    	this.databaseRepository = databaseRepository;
-	}
+
 
     @Override
     public Object queryAll(DatabaseQueryCriteria criteria, Pageable pageable){
-        Page<Database> page = databaseRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        Page<Database> page = null;//databaseRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         return PageUtil.toPage(page.map(databaseMapper::toDto));
     }
 
     @Override
     public List<DatabaseDto> queryAll(DatabaseQueryCriteria criteria){
-        return databaseMapper.toDto(databaseRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return null;//databaseMapper.toDto(databaseRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     public DatabaseDto findById(String id) {
-        Database database = databaseRepository.findById(id).orElseGet(Database::new);
+        Database database = null;//databaseRepository.findById(id).orElseGet(Database::new);
         ValidationUtil.isNull(database.getId(),"Database","id",id);
         return databaseMapper.toDto(database);
     }
@@ -63,23 +60,23 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Transactional(rollbackFor = Exception.class)
     public DatabaseDto create(Database resources) {
         resources.setId(IdUtil.simpleUUID());
-        return databaseMapper.toDto(databaseRepository.save(resources));
+        return null;//databaseMapper.toDto(databaseRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(Database resources) {
-        Database database = databaseRepository.findById(resources.getId()).orElseGet(Database::new);
+        Database database = null;//databaseRepository.findById(resources.getId()).orElseGet(Database::new);
         ValidationUtil.isNull(database.getId(),"Database","id",resources.getId());
         database.copy(resources);
-        databaseRepository.save(database);
+//        databaseRepository.save(database);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Set<String> ids) {
         for (String id : ids) {
-            databaseRepository.deleteById(id);
+//            databaseRepository.deleteById(id);
         }
     }
 
@@ -104,6 +101,6 @@ public class DatabaseServiceImpl implements DatabaseService {
             map.put("创建日期", databaseDto.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+//        FileUtil.downloadExcel(list, response);
     }
 }

@@ -1,9 +1,7 @@
 package co.yixiang.modules.system.repository;
 
 import co.yixiang.modules.system.domain.Dept;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
+
 import java.util.List;
 import java.util.Set;
 
@@ -12,7 +10,7 @@ import java.util.Set;
 * @date 2019-03-25
 */
 @SuppressWarnings("all")
-public interface DeptRepository extends JpaRepository<Dept, Long>, JpaSpecificationExecutor<Dept> {
+public interface DeptRepository  {
 
     /**
      * 根据 PID 查询
@@ -26,7 +24,7 @@ public interface DeptRepository extends JpaRepository<Dept, Long>, JpaSpecificat
      * @param id ID
      * @return /
      */
-    @Query(value = "select name from dept where id = ?1",nativeQuery = true)
+    //@Query(value = "select name from dept where id = ?1",nativeQuery = true)
     String findNameById(Long id);
 
     /**

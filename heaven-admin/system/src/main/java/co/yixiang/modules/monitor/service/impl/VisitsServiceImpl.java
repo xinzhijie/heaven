@@ -4,7 +4,7 @@ import co.yixiang.modules.monitor.domain.Visits;
 import lombok.extern.slf4j.Slf4j;
 import co.yixiang.modules.monitor.repository.VisitsRepository;
 import co.yixiang.modules.monitor.service.VisitsService;
-import co.yixiang.repository.LogRepository;
+
 import co.yixiang.utils.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,11 +27,10 @@ public class VisitsServiceImpl implements VisitsService {
 
     private final VisitsRepository visitsRepository;
 
-    private final LogRepository logRepository;
 
-    public VisitsServiceImpl(VisitsRepository visitsRepository, LogRepository logRepository) {
+    public VisitsServiceImpl(VisitsRepository visitsRepository) {
         this.visitsRepository = visitsRepository;
-        this.logRepository = logRepository;
+
     }
 
     @Override
@@ -44,7 +43,7 @@ public class VisitsServiceImpl implements VisitsService {
             visits.setPvCounts(1L);
             visits.setIpCounts(1L);
             visits.setDate(localDate.toString());
-            visitsRepository.save(visits);
+//            visitsRepository.save(visits);
         }
     }
 
@@ -53,9 +52,9 @@ public class VisitsServiceImpl implements VisitsService {
         LocalDate localDate = LocalDate.now();
         Visits visits = visitsRepository.findByDate(localDate.toString());
         visits.setPvCounts(visits.getPvCounts()+1);
-        long ipCounts = logRepository.findIp(localDate.toString(), localDate.plusDays(1).toString());
+        long ipCounts = 0L;//logRepository.findIp(localDate.toString(), localDate.plusDays(1).toString());
         visits.setIpCounts(ipCounts);
-        visitsRepository.save(visits);
+//        visitsRepository.save(visits);
     }
 
     @Override

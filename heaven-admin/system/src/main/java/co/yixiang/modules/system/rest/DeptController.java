@@ -2,7 +2,7 @@ package co.yixiang.modules.system.rest;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
-import co.yixiang.aop.log.Log;
+
 import co.yixiang.config.DataScope;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.system.domain.Dept;
@@ -44,7 +44,7 @@ public class DeptController {
         this.dataScope = dataScope;
     }
 
-    @Log("导出部门数据")
+
     @ApiOperation("导出部门数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('admin','dept:list')")
@@ -52,7 +52,6 @@ public class DeptController {
         deptService.download(deptService.queryAll(criteria), response);
     }
 
-    @Log("查询部门")
     @ApiOperation("查询部门")
     @GetMapping
     @PreAuthorize("@el.check('user:list','admin','dept:list')")
@@ -63,7 +62,6 @@ public class DeptController {
         return new ResponseEntity<>(deptService.buildTree(deptDtos),HttpStatus.OK);
     }
 
-    @Log("新增部门")
     @ApiOperation("新增部门")
     @PostMapping
     @PreAuthorize("@el.check('admin','dept:add')")
@@ -74,7 +72,6 @@ public class DeptController {
         return new ResponseEntity<>(deptService.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改部门")
     @ApiOperation("修改部门")
     @PutMapping
     @PreAuthorize("@el.check('admin','dept:edit')")
@@ -83,7 +80,6 @@ public class DeptController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除部门")
     @ApiOperation("删除部门")
     @DeleteMapping
     @PreAuthorize("@el.check('admin','dept:del')")

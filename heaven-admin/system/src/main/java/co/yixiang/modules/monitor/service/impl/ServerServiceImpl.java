@@ -9,7 +9,7 @@ import co.yixiang.modules.monitor.service.dto.ServerDTO;
 import co.yixiang.modules.monitor.service.dto.ServerQueryCriteria;
 import co.yixiang.modules.monitor.service.mapper.ServerMapper;
 import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
+
 import co.yixiang.utils.ValidationUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,18 +28,18 @@ import java.util.Set;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class ServerServiceImpl implements ServerService {
 
-    private final ServerRepository serverRepository;
+    private  ServerRepository serverRepository;
 
-    private final ServerMapper serverMapper;
+    private  ServerMapper serverMapper;
 
-    public ServerServiceImpl(ServerRepository serverRepository, ServerMapper serverMapper) {
-        this.serverRepository = serverRepository;
-        this.serverMapper = serverMapper;
-    }
+//    public ServerServiceImpl(ServerRepository serverRepository, ServerMapper serverMapper) {
+//        this.serverRepository = serverRepository;
+//        this.serverMapper = serverMapper;
+//    }
 
     @Override
     public Map<String,Object> queryAll(ServerQueryCriteria criteria, Pageable pageable){
-        Page<Server> page = serverRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        Page<Server> page = null;//serverRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         page.forEach(server -> {
 			try {
 				server.setState("1");
@@ -65,12 +65,13 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     public List<ServerDTO> queryAll(ServerQueryCriteria criteria){
-        return serverMapper.toDto(serverRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+//        return serverMapper.toDto(serverRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return null;
     }
 
     @Override
     public ServerDTO findById(Integer id) {
-        Server server = serverRepository.findById(id).orElseGet(Server::new);
+        Server server = null;//serverRepository.findById(id).orElseGet(Server::new);
         ValidationUtil.isNull(server.getId(),"Server","id",id);
         return serverMapper.toDto(server);
     }
@@ -78,23 +79,23 @@ public class ServerServiceImpl implements ServerService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ServerDTO create(Server resources) {
-        return serverMapper.toDto(serverRepository.save(resources));
+        return null;//serverMapper.toDto(serverRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(Server resources) {
-        Server server = serverRepository.findById(resources.getId()).orElseGet(Server::new);
+        Server server = null;//serverRepository.findById(resources.getId()).orElseGet(Server::new);
         ValidationUtil.isNull( server.getId(),"Server","id",resources.getId());
         server.copy(resources);
-        serverRepository.save(server);
+//        serverRepository.save(server);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Set<Integer> ids) {
         for (Integer id : ids) {
-            serverRepository.deleteById(id);
+//            serverRepository.deleteById(id);
         }
     }
 

@@ -1,6 +1,6 @@
 package co.yixiang.modules.mnt.rest;
 
-import co.yixiang.aop.log.Log;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import co.yixiang.modules.mnt.domain.ServerDeploy;
@@ -31,7 +31,7 @@ public class ServerDeployController {
         this.serverDeployService = serverDeployService;
     }
 
-    @Log("导出服务器数据")
+
     @ApiOperation("导出服务器数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('admin','serverDeploy:list')")
@@ -39,7 +39,7 @@ public class ServerDeployController {
         serverDeployService.download(serverDeployService.queryAll(criteria), response);
     }
 
-    @Log("查询服务器")
+
     @ApiOperation(value = "查询服务器")
     @GetMapping
 	@PreAuthorize("@el.check('admin','serverDeploy:list')")
@@ -47,7 +47,7 @@ public class ServerDeployController {
     	return new ResponseEntity<>(serverDeployService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("新增服务器")
+
     @ApiOperation(value = "新增服务器")
     @PostMapping
 	@PreAuthorize("@el.check('admin','serverDeploy:add')")
@@ -55,7 +55,7 @@ public class ServerDeployController {
         return new ResponseEntity<>(serverDeployService.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改服务器")
+
     @ApiOperation(value = "修改服务器")
     @PutMapping
 	@PreAuthorize("@el.check('admin','serverDeploy:edit')")
@@ -64,7 +64,6 @@ public class ServerDeployController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除服务器")
     @ApiOperation(value = "删除Server")
 	@DeleteMapping
 	@PreAuthorize("@el.check('admin','serverDeploy:del')")
@@ -73,7 +72,6 @@ public class ServerDeployController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-	@Log("测试连接服务器")
 	@ApiOperation(value = "测试连接服务器")
 	@PostMapping("/testConnect")
 	@PreAuthorize("@el.check('admin','serverDeploy:add')")

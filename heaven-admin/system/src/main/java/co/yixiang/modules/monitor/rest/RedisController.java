@@ -4,7 +4,6 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.monitor.service.RedisService;
-import co.yixiang.aop.log.Log;
 import co.yixiang.modules.monitor.domain.vo.RedisVo;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +25,12 @@ public class RedisController {
     @Autowired
     private RedisService redisService;
 
-    @Log("查询Redis缓存")
     @GetMapping(value = "/redis")
     @PreAuthorize("hasAnyRole('ADMIN','REDIS_ALL','REDIS_SELECT')")
     public ResponseEntity getRedis(String key, Pageable pageable){
         return new ResponseEntity(redisService.findByKey(key,pageable), HttpStatus.OK);
     }
 
-    @Log("删除Redis缓存")
     @DeleteMapping(value = "/redis")
     @PreAuthorize("hasAnyRole('ADMIN','REDIS_ALL','REDIS_DELETE')")
     public ResponseEntity delete(@RequestBody RedisVo resources){
@@ -42,7 +39,6 @@ public class RedisController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Log("清空Redis缓存")
     @DeleteMapping(value = "/redis/all")
     @PreAuthorize("hasAnyRole('ADMIN','REDIS_ALL','REDIS_DELETE')")
     public ResponseEntity deleteAll(){

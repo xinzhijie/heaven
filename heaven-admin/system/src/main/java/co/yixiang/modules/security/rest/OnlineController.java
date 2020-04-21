@@ -1,7 +1,6 @@
 package co.yixiang.modules.security.rest;
 
 import cn.hutool.core.util.StrUtil;
-import co.yixiang.aop.log.Log;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.security.service.OnlineUserService;
 import io.swagger.annotations.Api;
@@ -39,7 +38,6 @@ public class OnlineController {
         return new ResponseEntity<>(onlineUserService.getAll(filter, type,pageable),HttpStatus.OK);
     }
 
-    @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check()")

@@ -4,9 +4,7 @@ import co.yixiang.modules.system.service.dto.JobDTO;
 import co.yixiang.modules.system.service.dto.JobQueryCriteria;
 import co.yixiang.modules.system.domain.Job;
 import co.yixiang.modules.system.repository.DeptRepository;
-import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
 import co.yixiang.utils.ValidationUtil;
 import co.yixiang.modules.system.repository.JobRepository;
 import co.yixiang.modules.system.service.JobService;
@@ -33,22 +31,22 @@ import java.util.*;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class JobServiceImpl implements JobService {
 
-    private final JobRepository jobRepository;
+    private JobRepository jobRepository;
 
-    private final JobMapper jobMapper;
+    private JobMapper jobMapper;
 
-    private final DeptRepository deptRepository;
+    private DeptRepository deptRepository;
 
-    public JobServiceImpl(JobRepository jobRepository, JobMapper jobMapper, DeptRepository deptRepository) {
-        this.jobRepository = jobRepository;
-        this.jobMapper = jobMapper;
-        this.deptRepository = deptRepository;
-    }
+//    public JobServiceImpl(JobRepository jobRepository, JobMapper jobMapper, DeptRepository deptRepository) {
+//        this.jobRepository = jobRepository;
+//        this.jobMapper = jobMapper;
+//        this.deptRepository = deptRepository;
+//    }
 
     @Override
     @Cacheable
     public Map<String,Object> queryAll(JobQueryCriteria criteria, Pageable pageable) {
-        Page<Job> page = jobRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        Page<Job> page = null;//jobRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<JobDTO> jobs = new ArrayList<>();
         for (Job job : page.getContent()) {
             jobs.add(jobMapper.toDto(job,deptRepository.findNameById(job.getDept().getPid())));
@@ -59,14 +57,14 @@ public class JobServiceImpl implements JobService {
     @Override
     @Cacheable
     public List<JobDTO> queryAll(JobQueryCriteria criteria) {
-        List<Job> list = jobRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder));
+        List<Job> list = null;//jobRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder));
         return jobMapper.toDto(list);
     }
 
     @Override
     @Cacheable(key = "#p0")
     public JobDTO findById(Long id) {
-        Job job = jobRepository.findById(id).orElseGet(Job::new);
+        Job job = null;//jobRepository.findById(id).orElseGet(Job::new);
         ValidationUtil.isNull(job.getId(),"Job","id",id);
         return jobMapper.toDto(job);
     }
@@ -75,17 +73,18 @@ public class JobServiceImpl implements JobService {
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public JobDTO create(Job resources) {
-        return jobMapper.toDto(jobRepository.save(resources));
+//        return jobMapper.toDto(jobRepository.save(resources));
+        return null;
     }
 
     @Override
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void update(Job resources) {
-        Job job = jobRepository.findById(resources.getId()).orElseGet(Job::new);
+        Job job = null;//jobRepository.findById(resources.getId()).orElseGet(Job::new);
         ValidationUtil.isNull( job.getId(),"Job","id",resources.getId());
         resources.setId(job.getId());
-        jobRepository.save(resources);
+//        jobRepository.save(resources);
     }
 
     @Override
@@ -93,7 +92,7 @@ public class JobServiceImpl implements JobService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(Set<Long> ids) {
         for (Long id : ids) {
-            jobRepository.deleteById(id);
+//            jobRepository.deleteById(id);
         }
     }
 
@@ -108,6 +107,6 @@ public class JobServiceImpl implements JobService {
             map.put("创建日期", jobDTO.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+//        FileUtil.downloadExcel(list, response);
     }
 }

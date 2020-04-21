@@ -5,8 +5,6 @@ import co.yixiang.modules.system.service.dto.DeptQueryCriteria;
 import co.yixiang.modules.system.service.mapper.DeptMapper;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.system.domain.Dept;
-import co.yixiang.utils.FileUtil;
-import co.yixiang.utils.QueryHelp;
 import co.yixiang.utils.ValidationUtil;
 import co.yixiang.modules.system.repository.DeptRepository;
 import co.yixiang.modules.system.service.DeptService;
@@ -31,25 +29,23 @@ import java.util.stream.Collectors;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class DeptServiceImpl implements DeptService {
 
-    private final DeptRepository deptRepository;
+    private  DeptRepository deptRepository;
 
-    private final DeptMapper deptMapper;
+    private  DeptMapper deptMapper;
 
-    public DeptServiceImpl(DeptRepository deptRepository, DeptMapper deptMapper) {
-        this.deptRepository = deptRepository;
-        this.deptMapper = deptMapper;
-    }
+
 
     @Override
     @Cacheable
     public List<DeptDTO> queryAll(DeptQueryCriteria criteria) {
-        return deptMapper.toDto(deptRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+//        return deptMapper.toDto(deptRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return null;
     }
 
     @Override
     @Cacheable(key = "#p0")
     public DeptDTO findById(Long id) {
-        Dept dept = deptRepository.findById(id).orElseGet(Dept::new);
+        Dept dept = null;//deptRepository.findById(id).orElseGet(Dept::new);
         ValidationUtil.isNull(dept.getId(),"Dept","id",id);
         return deptMapper.toDto(dept);
     }
@@ -109,7 +105,8 @@ public class DeptServiceImpl implements DeptService {
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public DeptDTO create(Dept resources) {
-        return deptMapper.toDto(deptRepository.save(resources));
+//        return deptMapper.toDto(deptRepository.save(resources));
+        return null;
     }
 
     @Override
@@ -119,10 +116,10 @@ public class DeptServiceImpl implements DeptService {
         if(resources.getId().equals(resources.getPid())) {
             throw new BadRequestException("上级不能为自己");
         }
-        Dept dept = deptRepository.findById(resources.getId()).orElseGet(Dept::new);
+        Dept dept = null;//deptRepository.findById(resources.getId()).orElseGet(Dept::new);
         ValidationUtil.isNull( dept.getId(),"Dept","id",resources.getId());
         resources.setId(dept.getId());
-        deptRepository.save(resources);
+//        deptRepository.save(resources);
     }
 
     @Override
@@ -130,7 +127,7 @@ public class DeptServiceImpl implements DeptService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(Set<DeptDTO> deptDtos) {
         for (DeptDTO deptDto : deptDtos) {
-            deptRepository.deleteById(deptDto.getId());
+//            deptRepository.deleteById(deptDto.getId());
         }
     }
 
@@ -144,7 +141,7 @@ public class DeptServiceImpl implements DeptService {
             map.put("创建日期", deptDTO.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+//        FileUtil.downloadExcel(list, response);
     }
 
     @Override

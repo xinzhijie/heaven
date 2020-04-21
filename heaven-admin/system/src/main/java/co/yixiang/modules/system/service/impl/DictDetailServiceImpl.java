@@ -7,7 +7,6 @@ import co.yixiang.modules.system.service.dto.DictDetailDTO;
 import co.yixiang.modules.system.service.dto.DictDetailQueryCriteria;
 import co.yixiang.modules.system.service.mapper.DictDetailMapper;
 import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
 import co.yixiang.utils.ValidationUtil;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -41,14 +40,14 @@ public class DictDetailServiceImpl implements DictDetailService {
     @Override
     @Cacheable
     public Map<String,Object> queryAll(DictDetailQueryCriteria criteria, Pageable pageable) {
-        Page<DictDetail> page = dictDetailRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        Page<DictDetail> page = null;//dictDetailRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         return PageUtil.toPage(page.map(dictDetailMapper::toDto));
     }
 
     @Override
     @Cacheable(key = "#p0")
     public DictDetailDTO findById(Long id) {
-        DictDetail dictDetail = dictDetailRepository.findById(id).orElseGet(DictDetail::new);
+        DictDetail dictDetail = null;//dictDetailRepository.findById(id).orElseGet(DictDetail::new);
         ValidationUtil.isNull(dictDetail.getId(),"DictDetail","id",id);
         return dictDetailMapper.toDto(dictDetail);
     }
@@ -57,23 +56,24 @@ public class DictDetailServiceImpl implements DictDetailService {
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public DictDetailDTO create(DictDetail resources) {
-        return dictDetailMapper.toDto(dictDetailRepository.save(resources));
+//        return dictDetailMapper.toDto(dictDetailRepository.save(resources));
+        return null;
     }
 
     @Override
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void update(DictDetail resources) {
-        DictDetail dictDetail = dictDetailRepository.findById(resources.getId()).orElseGet(DictDetail::new);
+        DictDetail dictDetail = null;//dictDetailRepository.findById(resources.getId()).orElseGet(DictDetail::new);
         ValidationUtil.isNull( dictDetail.getId(),"DictDetail","id",resources.getId());
         resources.setId(dictDetail.getId());
-        dictDetailRepository.save(resources);
+//        dictDetailRepository.save(resources);
     }
 
     @Override
     @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        dictDetailRepository.deleteById(id);
+//        dictDetailRepository.deleteById(id);
     }
 }

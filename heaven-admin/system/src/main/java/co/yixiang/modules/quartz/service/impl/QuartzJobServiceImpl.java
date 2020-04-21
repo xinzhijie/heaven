@@ -6,9 +6,9 @@ import co.yixiang.modules.quartz.domain.QuartzLog;
 import co.yixiang.modules.quartz.service.QuartzJobService;
 import co.yixiang.modules.quartz.service.dto.JobQueryCriteria;
 import co.yixiang.modules.quartz.utils.QuartzManage;
-import co.yixiang.utils.FileUtil;
+
 import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
+
 import co.yixiang.utils.ValidationUtil;
 import co.yixiang.modules.quartz.repository.QuartzJobRepository;
 import co.yixiang.modules.quartz.repository.QuartzLogRepository;
@@ -34,43 +34,39 @@ import java.util.*;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class QuartzJobServiceImpl implements QuartzJobService {
 
-    private final QuartzJobRepository quartzJobRepository;
+    private QuartzJobRepository quartzJobRepository;
 
-    private final QuartzLogRepository quartzLogRepository;
+    private QuartzLogRepository quartzLogRepository;
 
-    private final QuartzManage quartzManage;
+    private QuartzManage quartzManage;
 
-    public QuartzJobServiceImpl(QuartzJobRepository quartzJobRepository, QuartzLogRepository quartzLogRepository, QuartzManage quartzManage) {
-        this.quartzJobRepository = quartzJobRepository;
-        this.quartzLogRepository = quartzLogRepository;
-        this.quartzManage = quartzManage;
-    }
+
 
     @Override
     @Cacheable
     public Object queryAll(JobQueryCriteria criteria, Pageable pageable){
-        return PageUtil.toPage(quartzJobRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable));
+        return null;//PageUtil.toPage(quartzJobRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable));
     }
 
     @Override
     public Object queryAllLog(JobQueryCriteria criteria, Pageable pageable){
-        return PageUtil.toPage(quartzLogRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable));
+        return null;//PageUtil.toPage(quartzLogRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable));
     }
 
     @Override
     public List<QuartzJob> queryAll(JobQueryCriteria criteria) {
-        return quartzJobRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder));
+        return null;//quartzJobRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder));
     }
 
     @Override
     public List<QuartzLog> queryAllLog(JobQueryCriteria criteria) {
-        return quartzLogRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder));
+        return null;//quartzLogRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder));
     }
 
     @Override
     @Cacheable(key = "#p0")
     public QuartzJob findById(Long id) {
-        QuartzJob quartzJob = quartzJobRepository.findById(id).orElseGet(QuartzJob::new);
+        QuartzJob quartzJob = null;//quartzJobRepository.findById(id).orElseGet(QuartzJob::new);
         ValidationUtil.isNull(quartzJob.getId(),"QuartzJob","id",id);
         return quartzJob;
     }
@@ -82,7 +78,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
         if (!CronExpression.isValidExpression(resources.getCronExpression())){
             throw new BadRequestException("cron表达式格式错误");
         }
-        resources = quartzJobRepository.save(resources);
+        resources = null;//quartzJobRepository.save(resources);
         quartzManage.addJob(resources);
         return resources;
     }
@@ -97,7 +93,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
         if (!CronExpression.isValidExpression(resources.getCronExpression())){
             throw new BadRequestException("cron表达式格式错误");
         }
-        resources = quartzJobRepository.save(resources);
+        resources = null;//quartzJobRepository.save(resources);
         quartzManage.updateJobCron(resources);
     }
 
@@ -114,7 +110,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
             quartzManage.pauseJob(quartzJob);
             quartzJob.setIsPause(true);
         }
-        quartzJobRepository.save(quartzJob);
+//        quartzJobRepository.save(quartzJob);
     }
 
     @Override
@@ -135,7 +131,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
             }
             QuartzJob quartzJob = findById(id);
             quartzManage.deleteJob(quartzJob);
-            quartzJobRepository.delete(quartzJob);
+//            quartzJobRepository.delete(quartzJob);
         }
     }
 
@@ -154,7 +150,7 @@ public class QuartzJobServiceImpl implements QuartzJobService {
             map.put("创建日期", quartzJob.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+//        FileUtil.downloadExcel(list, response);
     }
 
     @Override
@@ -173,6 +169,6 @@ public class QuartzJobServiceImpl implements QuartzJobService {
             map.put("创建日期", quartzLog.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+//        FileUtil.downloadExcel(list, response);
     }
 }

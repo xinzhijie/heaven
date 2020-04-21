@@ -41,41 +41,35 @@ import java.util.*;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class DeployServiceImpl implements DeployService {
 
-	private final String FILE_SEPARATOR = "/";
+	private  String FILE_SEPARATOR = "/";
 
-	private final DeployRepository deployRepository;
+	private  DeployRepository deployRepository;
 
-	private final DeployMapper deployMapper;
+	private  DeployMapper deployMapper;
 
-	private final ServerDeployService serverDeployService;
+	private  ServerDeployService serverDeployService;
 
-	private final DeployHistoryService deployHistoryService;
+	private  DeployHistoryService deployHistoryService;
 
 	// 循环次数
 	private final Integer count = 30;
 
-	public DeployServiceImpl(DeployRepository deployRepository, DeployMapper deployMapper, ServerDeployService serverDeployService, DeployHistoryService deployHistoryService) {
-		this.deployRepository = deployRepository;
-		this.deployMapper = deployMapper;
-		this.serverDeployService = serverDeployService;
-		this.deployHistoryService = deployHistoryService;
-	}
 
 
 	@Override
 	public Object queryAll(DeployQueryCriteria criteria, Pageable pageable) {
-		Page<Deploy> page = deployRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable);
+		Page<Deploy> page = null;//deployRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable);
 		return PageUtil.toPage(page.map(deployMapper::toDto));
 	}
 
 	@Override
 	public List<DeployDto> queryAll(DeployQueryCriteria criteria) {
-		return deployMapper.toDto(deployRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder)));
+		return null;//deployMapper.toDto(deployRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder)));
 	}
 
 	@Override
 	public DeployDto findById(Long id) {
-		Deploy deploy = deployRepository.findById(id).orElseGet(Deploy::new);
+		Deploy deploy = null;//deployRepository.findById(id).orElseGet(Deploy::new);
 		ValidationUtil.isNull(deploy.getId(), "Deploy", "id", id);
 		return deployMapper.toDto(deploy);
 	}
@@ -83,23 +77,23 @@ public class DeployServiceImpl implements DeployService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public DeployDto create(Deploy resources) {
-		return deployMapper.toDto(deployRepository.save(resources));
+		return null;//deployMapper.toDto(deployRepository.save(resources));
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void update(Deploy resources) {
-		Deploy deploy = deployRepository.findById(resources.getId()).orElseGet(Deploy::new);
+		Deploy deploy = null;//deployRepository.findById(resources.getId()).orElseGet(Deploy::new);
 		ValidationUtil.isNull(deploy.getId(), "Deploy", "id", resources.getId());
 		deploy.copy(resources);
-		deployRepository.save(deploy);
+//		deployRepository.save(deploy);
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void delete(Set<Long> ids) {
 		for (Long id : ids) {
-			deployRepository.deleteById(id);
+//			deployRepository.deleteById(id);
 		}
 	}
 
@@ -341,7 +335,7 @@ public class DeployServiceImpl implements DeployService {
 	@Override
 	public String serverReduction(DeployHistory resources) {
 		Long deployId = resources.getDeployId();
-		Deploy deployInfo = deployRepository.findById(deployId).orElseGet(Deploy::new);
+		Deploy deployInfo = null;//deployRepository.findById(deployId).orElseGet(Deploy::new);
 		String deployDate = DateUtil.format(resources.getDeployDate(), DatePattern.PURE_DATETIME_PATTERN);
 		App app = deployInfo.getApp();
 		if (app == null) {
@@ -430,6 +424,6 @@ public class DeployServiceImpl implements DeployService {
 			map.put("部署日期", deployDto.getCreateTime());
 			list.add(map);
 		}
-		FileUtil.downloadExcel(list, response);
+//		FileUtil.downloadExcel(list, response);
 	}
 }

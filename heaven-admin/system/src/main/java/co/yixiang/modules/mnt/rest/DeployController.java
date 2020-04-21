@@ -1,7 +1,6 @@
 package co.yixiang.modules.mnt.rest;
 
-import co.yixiang.aop.log.Log;
-import co.yixiang.utils.FileUtil;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import co.yixiang.modules.mnt.domain.Deploy;
@@ -41,7 +40,7 @@ public class DeployController {
 		this.deployService = deployService;
 	}
 
-	@Log("导出部署数据")
+
 	@ApiOperation("导出部署数据")
 	@GetMapping(value = "/download")
 	@PreAuthorize("@el.check('admin','database:list')")
@@ -49,7 +48,7 @@ public class DeployController {
 		deployService.download(deployService.queryAll(criteria), response);
 	}
 
-	@Log("查询部署")
+
     @ApiOperation(value = "查询部署")
     @GetMapping
 	@PreAuthorize("@el.check('admin','deploy:list')")
@@ -57,7 +56,7 @@ public class DeployController {
     	return new ResponseEntity<>(deployService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("新增部署")
+
     @ApiOperation(value = "新增部署")
     @PostMapping
 	@PreAuthorize("@el.check('admin','deploy:add')")
@@ -65,7 +64,6 @@ public class DeployController {
         return new ResponseEntity<>(deployService.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改部署")
     @ApiOperation(value = "修改部署")
     @PutMapping
 	@PreAuthorize("@el.check('admin','deploy:edit')")
@@ -74,7 +72,6 @@ public class DeployController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-	@Log("删除部署")
 	@ApiOperation(value = "删除部署")
 	@DeleteMapping
 	@PreAuthorize("@el.check('admin','deploy:del')")
@@ -83,7 +80,6 @@ public class DeployController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@Log("上传文件部署")
 	@ApiOperation(value = "上传文件部署")
 	@PostMapping(value = "/upload")
 	@PreAuthorize("@el.check('admin','deploy:edit')")
@@ -93,7 +89,7 @@ public class DeployController {
 		if(file != null){
 			fileName = file.getOriginalFilename();
 			File deployFile = new File(fileSavePath+fileName);
-			FileUtil.del(deployFile);
+//			FileUtil.del(deployFile);
 			file.transferTo(deployFile);
 			//文件下一步要根据文件名字来
 			deployService.deploy(fileSavePath+fileName ,id);
@@ -106,7 +102,8 @@ public class DeployController {
 		map.put("id",fileName);
 		return new ResponseEntity<>(map,HttpStatus.OK);
 	}
-	@Log("系统还原")
+
+
 	@ApiOperation(value = "系统还原")
 	@PostMapping(value = "/serverReduction")
 	@PreAuthorize("@el.check('admin','deploy:edit')")
@@ -114,7 +111,8 @@ public class DeployController {
 		String result = deployService.serverReduction(resources);
 		return new ResponseEntity<>(result,HttpStatus.OK);
 	}
-	@Log("服务运行状态")
+
+
 	@ApiOperation(value = "服务运行状态")
 	@PostMapping(value = "/serverStatus")
 	@PreAuthorize("@el.check('admin','deploy:edit')")
@@ -122,7 +120,8 @@ public class DeployController {
 		String result = deployService.serverStatus(resources);
     	return new ResponseEntity<>(result,HttpStatus.OK);
 	}
-	@Log("启动服务")
+
+
 	@ApiOperation(value = "启动服务")
 	@PostMapping(value = "/startServer")
 	@PreAuthorize("@el.check('admin','deploy:edit')")
@@ -130,7 +129,8 @@ public class DeployController {
 		String result = deployService.startServer(resources);
 		return new ResponseEntity<>(result,HttpStatus.OK);
 	}
-	@Log("停止服务")
+
+
 	@ApiOperation(value = "停止服务")
 	@PostMapping(value = "/stopServer")
 	@PreAuthorize("@el.check('admin','deploy:edit')")

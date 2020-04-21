@@ -1,7 +1,7 @@
 package co.yixiang.modules.monitor.rest;
 
 import cn.hutool.core.util.StrUtil;
-import co.yixiang.aop.log.Log;
+
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.monitor.domain.Server;
 import co.yixiang.modules.monitor.service.ServerService;
@@ -33,7 +33,7 @@ public class ServerController {
     }
 
     @GetMapping
-    @Log("查询服务监控")
+
     @ApiOperation("查询服务监控")
     @PreAuthorize("@el.check('admin','server:list')")
     public ResponseEntity<Object> getServers(ServerQueryCriteria criteria, Pageable pageable){
@@ -41,7 +41,7 @@ public class ServerController {
     }
 
     @PostMapping
-    @Log("新增服务监控")
+
     @ApiOperation("新增服务监控")
     @PreAuthorize("@el.check('admin','server:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody Server resources){
@@ -50,7 +50,7 @@ public class ServerController {
     }
 
     @PutMapping
-    @Log("修改服务监控")
+
     @ApiOperation("修改服务监控")
     @PreAuthorize("@el.check('admin','server:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody Server resources){
@@ -60,7 +60,7 @@ public class ServerController {
     }
 
     @DeleteMapping
-    @Log("删除服务监控")
+
     @ApiOperation("删除服务监控")
     @PreAuthorize("@el.check('admin','server:del')")
     public ResponseEntity<Object> delete(@RequestBody Set<Integer> ids){

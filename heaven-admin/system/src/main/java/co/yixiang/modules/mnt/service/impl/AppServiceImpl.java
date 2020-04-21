@@ -5,9 +5,9 @@ import co.yixiang.modules.mnt.domain.App;
 import co.yixiang.modules.mnt.service.AppService;
 import co.yixiang.modules.mnt.service.dto.AppDto;
 import co.yixiang.modules.mnt.service.dto.AppQueryCriteria;
-import co.yixiang.utils.FileUtil;
+
 import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
+
 import co.yixiang.utils.ValidationUtil;
 import co.yixiang.modules.mnt.repository.AppRepository;
 import co.yixiang.modules.mnt.service.mapper.AppMapper;
@@ -32,25 +32,22 @@ public class AppServiceImpl implements AppService {
 
     private AppMapper appMapper;
 
-	public AppServiceImpl(AppRepository appRepository, AppMapper appMapper) {
-		this.appMapper = appMapper;
-		this.appRepository = appRepository;
-	}
+
 
     @Override
     public Object queryAll(AppQueryCriteria criteria, Pageable pageable){
-        Page<App> page = appRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        Page<App> page = null;//appRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         return PageUtil.toPage(page.map(appMapper::toDto));
     }
 
     @Override
     public List<AppDto> queryAll(AppQueryCriteria criteria){
-        return appMapper.toDto(appRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return null;//appMapper.toDto(appRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override
     public AppDto findById(Long id) {
-		App app = appRepository.findById(id).orElseGet(App::new);
+		App app = null;//appRepository.findById(id).orElseGet(App::new);
         ValidationUtil.isNull(app.getId(),"App","id",id);
         return appMapper.toDto(app);
     }
@@ -59,17 +56,17 @@ public class AppServiceImpl implements AppService {
     @Transactional(rollbackFor = Exception.class)
     public AppDto create(App resources) {
         verification(resources);
-        return appMapper.toDto(appRepository.save(resources));
+        return null;//appMapper.toDto(appRepository.save(resources));
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(App resources) {
         verification(resources);
-        App app = appRepository.findById(resources.getId()).orElseGet(App::new);
+        App app = null;//appRepository.findById(resources.getId()).orElseGet(App::new);
         ValidationUtil.isNull(app.getId(),"App","id",resources.getId());
         app.copy(resources);
-        appRepository.save(app);
+//        appRepository.save(app);
     }
 
     private void verification(App resources){
@@ -90,7 +87,7 @@ public class AppServiceImpl implements AppService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(Set<Long> ids) {
         for (Long id : ids) {
-            appRepository.deleteById(id);
+//            appRepository.deleteById(id);
         }
     }
 
@@ -109,6 +106,6 @@ public class AppServiceImpl implements AppService {
             map.put("创建日期", appDto.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+//        FileUtil.downloadExcel(list, response);
     }
 }

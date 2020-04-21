@@ -1,7 +1,7 @@
 package co.yixiang.modules.system.rest;
 
 import cn.hutool.core.util.StrUtil;
-import co.yixiang.aop.log.Log;
+
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.system.domain.Dict;
 import co.yixiang.modules.system.service.DictService;
@@ -35,7 +35,7 @@ public class DictController {
         this.dictService = dictService;
     }
 
-    @Log("导出字典数据")
+
     @ApiOperation("导出字典数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('admin','dict:list')")
@@ -43,7 +43,6 @@ public class DictController {
         dictService.download(dictService.queryAll(criteria), response);
     }
 
-    @Log("查询字典")
     @ApiOperation("查询字典")
     @GetMapping(value = "/all")
     @PreAuthorize("@el.check('admin','dict:list')")
@@ -51,7 +50,6 @@ public class DictController {
         return new ResponseEntity<>(dictService.queryAll(new DictQueryCriteria()),HttpStatus.OK);
     }
 
-    @Log("查询字典")
     @ApiOperation("查询字典")
     @GetMapping
     @PreAuthorize("@el.check('admin','dict:list')")
@@ -59,7 +57,6 @@ public class DictController {
         return new ResponseEntity<>(dictService.queryAll(resources,pageable),HttpStatus.OK);
     }
 
-    @Log("新增字典")
     @ApiOperation("新增字典")
     @PostMapping
     @PreAuthorize("@el.check('admin','dict:add')")
@@ -70,7 +67,6 @@ public class DictController {
         return new ResponseEntity<>(dictService.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改字典")
     @ApiOperation("修改字典")
     @PutMapping
     @PreAuthorize("@el.check('admin','dict:edit')")
@@ -80,7 +76,6 @@ public class DictController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除字典")
     @ApiOperation("删除字典")
     @DeleteMapping(value = "/{id}")
     @PreAuthorize("@el.check('admin','dict:del')")

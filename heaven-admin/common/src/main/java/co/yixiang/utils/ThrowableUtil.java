@@ -1,7 +1,6 @@
 package co.yixiang.utils;
 
 import co.yixiang.exception.BadRequestException;
-import org.hibernate.exception.ConstraintViolationException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -24,7 +23,7 @@ public class ThrowableUtil {
 
     public static void throwForeignKeyException(Throwable e, String msg){
         Throwable t = e.getCause();
-        while ((t != null) && !(t instanceof ConstraintViolationException)) {
+        while ((t != null) && !(t instanceof Exception)) {
             t = t.getCause();
         }
         if (t != null) {

@@ -1,8 +1,7 @@
 package co.yixiang.modules.system.repository;
 
 import co.yixiang.modules.system.domain.Menu;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,7 +11,7 @@ import java.util.Set;
  * @date 2018-12-17
  */
 @SuppressWarnings("all")
-public interface MenuRepository extends JpaRepository<Menu, Long>, JpaSpecificationExecutor<Menu> {
+public interface MenuRepository {
 
     /**
      * 根据菜单名称查询

@@ -1,7 +1,6 @@
 package co.yixiang.modules.system.rest;
 
 import cn.hutool.core.util.StrUtil;
-import co.yixiang.aop.log.Log;
 import co.yixiang.config.DataScope;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.system.domain.Job;
@@ -41,7 +40,6 @@ public class JobController {
         this.dataScope = dataScope;
     }
 
-    @Log("导出岗位数据")
     @ApiOperation("导出岗位数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('admin','job:list')")
@@ -49,7 +47,6 @@ public class JobController {
         jobService.download(jobService.queryAll(criteria), response);
     }
 
-    @Log("查询岗位")
     @ApiOperation("查询岗位")
     @GetMapping
     @PreAuthorize("@el.check('admin','job:list','user:list')")
@@ -59,7 +56,6 @@ public class JobController {
         return new ResponseEntity<>(jobService.queryAll(criteria, pageable),HttpStatus.OK);
     }
 
-    @Log("新增岗位")
     @ApiOperation("新增岗位")
     @PostMapping
     @PreAuthorize("@el.check('admin','job:add')")
@@ -70,7 +66,6 @@ public class JobController {
         return new ResponseEntity<>(jobService.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改岗位")
     @ApiOperation("修改岗位")
     @PutMapping
     @PreAuthorize("@el.check('admin','job:edit')")
@@ -80,7 +75,6 @@ public class JobController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除岗位")
     @ApiOperation("删除岗位")
     @DeleteMapping
     @PreAuthorize("@el.check('admin','job:del')")

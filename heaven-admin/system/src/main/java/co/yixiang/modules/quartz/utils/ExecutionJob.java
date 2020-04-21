@@ -65,7 +65,7 @@ public class ExecutionJob extends QuartzJobBean {
             //更新状态
             quartzJobService.updateIsPause(quartzJob);
         } finally {
-            quartzLogRepository.save(log);
+//            quartzLogRepository.save(log);
         }
     }
 }

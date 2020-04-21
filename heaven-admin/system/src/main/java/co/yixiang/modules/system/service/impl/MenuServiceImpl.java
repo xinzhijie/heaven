@@ -12,8 +12,7 @@ import co.yixiang.modules.system.service.MenuService;
 import co.yixiang.modules.system.service.RoleService;
 import co.yixiang.modules.system.service.dto.*;
 import co.yixiang.modules.system.service.mapper.MenuMapper;
-import co.yixiang.utils.FileUtil;
-import co.yixiang.utils.QueryHelp;
+
 import co.yixiang.utils.StringUtils;
 import co.yixiang.utils.ValidationUtil;
 import org.springframework.cache.annotation.CacheConfig;
@@ -36,29 +35,26 @@ import java.util.stream.Collectors;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class MenuServiceImpl implements MenuService {
 
-    private final MenuRepository menuRepository;
+    private  MenuRepository menuRepository;
 
-    private final MenuMapper menuMapper;
+    private  MenuMapper menuMapper;
 
-    private final RoleService roleService;
+    private  RoleService roleService;
 
-    public MenuServiceImpl(MenuRepository menuRepository, MenuMapper menuMapper, RoleService roleService) {
-        this.menuRepository = menuRepository;
-        this.menuMapper = menuMapper;
-        this.roleService = roleService;
-    }
+
 
     @Override
     @Cacheable
     public List<MenuDTO> queryAll(MenuQueryCriteria criteria){
 //        Sort sort = new Sort(Sort.Direction.DESC,"id");
-        return menuMapper.toDto(menuRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+//        return menuMapper.toDto(menuRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        return null;
     }
 
     @Override
     @Cacheable(key = "#p0")
     public MenuDTO findById(long id) {
-        Menu menu = menuRepository.findById(id).orElseGet(Menu::new);
+        Menu menu = null;//menuRepository.findById(id).orElseGet(Menu::new);
         ValidationUtil.isNull(menu.getId(),"Menu","id",id);
         return menuMapper.toDto(menu);
     }
@@ -87,7 +83,7 @@ public class MenuServiceImpl implements MenuService {
                 throw new BadRequestException("外链必须以http://或者https://开头");
             }
         }
-        return menuMapper.toDto(menuRepository.save(resources));
+        return null;//menuMapper.toDto(menuRepository.save(resources));
     }
 
     @Override
@@ -96,7 +92,7 @@ public class MenuServiceImpl implements MenuService {
         if(resources.getId().equals(resources.getPid())) {
             throw new BadRequestException("上级不能为自己");
         }
-        Menu menu = menuRepository.findById(resources.getId()).orElseGet(Menu::new);
+        Menu menu = null;//menuRepository.findById(resources.getId()).orElseGet(Menu::new);
         ValidationUtil.isNull(menu.getId(),"Permission","id",resources.getId());
 
         if(resources.getIFrame()){
@@ -129,7 +125,7 @@ public class MenuServiceImpl implements MenuService {
         menu.setComponentName(resources.getComponentName());
         menu.setPermission(resources.getPermission());
         menu.setType(resources.getType());
-        menuRepository.save(menu);
+//        menuRepository.save(menu);
     }
 
     @Override
@@ -151,7 +147,7 @@ public class MenuServiceImpl implements MenuService {
     public void delete(Set<Menu> menuSet) {
         for (Menu menu : menuSet) {
             roleService.untiedMenu(menu.getId());
-            menuRepository.deleteById(menu.getId());
+//            menuRepository.deleteById(menu.getId());
         }
     }
 
@@ -260,7 +256,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public Menu findOne(Long id) {
-        Menu menu = menuRepository.findById(id).orElseGet(Menu::new);
+        Menu menu = null;//menuRepository.findById(id).orElseGet(Menu::new);
         ValidationUtil.isNull(menu.getId(),"Menu","id",id);
         return menu;
     }
@@ -279,6 +275,6 @@ public class MenuServiceImpl implements MenuService {
             map.put("创建日期", menuDTO.getCreateTime());
             list.add(map);
         }
-        FileUtil.downloadExcel(list, response);
+//        FileUtil.downloadExcel(list, response);
     }
 }

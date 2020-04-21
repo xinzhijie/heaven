@@ -1,7 +1,7 @@
 package co.yixiang.modules.system.rest;
 
 import cn.hutool.core.util.StrUtil;
-import co.yixiang.aop.log.Log;
+
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.system.domain.Menu;
 import co.yixiang.modules.system.service.MenuService;
@@ -49,7 +49,6 @@ public class MenuController {
         this.roleService = roleService;
     }
 
-    @Log("导出菜单数据")
     @ApiOperation("导出菜单数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('menu:list')")
@@ -74,7 +73,6 @@ public class MenuController {
         return new ResponseEntity<>(menuService.getMenuTree(menuService.findByPid(0L)),HttpStatus.OK);
     }
 
-    @Log("查询菜单")
     @ApiOperation("查询菜单")
     @GetMapping
     @PreAuthorize("@el.check('menu:list')")
@@ -83,7 +81,6 @@ public class MenuController {
         return new ResponseEntity<>(menuService.buildTree(menuDtoList),HttpStatus.OK);
     }
 
-    @Log("新增菜单")
     @ApiOperation("新增菜单")
     @PostMapping
     @PreAuthorize("@el.check('menu:add')")
@@ -95,7 +92,6 @@ public class MenuController {
         return new ResponseEntity<>(menuService.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改菜单")
     @ApiOperation("修改菜单")
     @PutMapping
     @PreAuthorize("@el.check('menu:edit')")
@@ -105,7 +101,6 @@ public class MenuController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除菜单")
     @ApiOperation("删除菜单")
     @DeleteMapping
     @PreAuthorize("@el.check('menu:del')")

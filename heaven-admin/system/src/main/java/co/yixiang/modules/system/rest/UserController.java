@@ -3,9 +3,8 @@ package co.yixiang.modules.system.rest;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
-import co.yixiang.aop.log.Log;
 import co.yixiang.config.DataScope;
-import co.yixiang.domain.VerificationCode;
+//import co.yixiang.domain.VerificationCode;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.system.domain.User;
 import co.yixiang.modules.system.domain.vo.UserPassVo;
@@ -15,7 +14,7 @@ import co.yixiang.modules.system.service.UserService;
 import co.yixiang.modules.system.service.dto.RoleSmallDTO;
 import co.yixiang.modules.system.service.dto.UserDTO;
 import co.yixiang.modules.system.service.dto.UserQueryCriteria;
-import co.yixiang.service.VerificationCodeService;
+//import co.yixiang.service.VerificationCodeService;
 import co.yixiang.utils.PageUtil;
 import co.yixiang.utils.SecurityUtils;
 import co.yixiang.utils.YshopConstant;
@@ -56,18 +55,17 @@ public class UserController {
     private final DataScope dataScope;
     private final DeptService deptService;
     private final RoleService roleService;
-    private final VerificationCodeService verificationCodeService;
+//    private final VerificationCodeService verificationCodeService;
 
-    public UserController(PasswordEncoder passwordEncoder, UserService userService, DataScope dataScope, DeptService deptService, RoleService roleService, VerificationCodeService verificationCodeService) {
+    public UserController(PasswordEncoder passwordEncoder, UserService userService, DataScope dataScope, DeptService deptService, RoleService roleService) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.dataScope = dataScope;
         this.deptService = deptService;
         this.roleService = roleService;
-        this.verificationCodeService = verificationCodeService;
+//        this.verificationCodeService = verificationCodeService;
     }
 
-    @Log("导出用户数据")
     @ApiOperation("导出用户数据")
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('admin','user:list')")
@@ -75,7 +73,6 @@ public class UserController {
         userService.download(userService.queryAll(criteria), response);
     }
 
-    @Log("查询用户")
     @ApiOperation("查询用户")
     @GetMapping
     @PreAuthorize("@el.check('admin','user:list')")
@@ -109,7 +106,6 @@ public class UserController {
         }
     }
 
-    @Log("新增用户")
     @ApiOperation("新增用户")
     @PostMapping
     @PreAuthorize("@el.check('admin','user:add')")
@@ -121,7 +117,6 @@ public class UserController {
         return new ResponseEntity<>(userService.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改用户")
     @ApiOperation("修改用户")
     @PutMapping
     @PreAuthorize("@el.check('admin','user:edit')")
@@ -132,7 +127,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("修改用户：个人中心")
     @ApiOperation("修改用户：个人中心")
     @PutMapping(value = "center")
     public ResponseEntity<Object> center(@Validated(User.Update.class) @RequestBody User resources){
@@ -145,7 +139,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除用户")
     @ApiOperation("删除用户")
     @DeleteMapping
     @PreAuthorize("@el.check('admin','user:del')")
@@ -190,23 +183,22 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Log("修改邮箱")
-    @ApiOperation("修改邮箱")
-    @PostMapping(value = "/updateEmail/{code}")
-    public ResponseEntity<Object> updateEmail(@PathVariable String code,@RequestBody User user){
-        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        // 密码解密
-        RSA rsa = new RSA(privateKey, null);
-        String password = new String(rsa.decrypt(user.getPassword(), KeyType.PrivateKey));
-        UserDTO userDto = userService.findByName(SecurityUtils.getUsername());
-        if(!passwordEncoder.matches(password, userDto.getPassword())){
-            throw new BadRequestException("密码错误");
-        }
-        VerificationCode verificationCode = new VerificationCode(code, YshopConstant.RESET_MAIL,"email",user.getEmail());
-        verificationCodeService.validated(verificationCode);
-        userService.updateEmail(userDto.getUsername(),user.getEmail());
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @ApiOperation("修改邮箱")
+//    @PostMapping(value = "/updateEmail/{code}")
+//    public ResponseEntity<Object> updateEmail(@PathVariable String code,@RequestBody User user){
+//        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
+//        // 密码解密
+//        RSA rsa = new RSA(privateKey, null);
+//        String password = new String(rsa.decrypt(user.getPassword(), KeyType.PrivateKey));
+//        UserDTO userDto = userService.findByName(SecurityUtils.getUsername());
+//        if(!passwordEncoder.matches(password, userDto.getPassword())){
+//            throw new BadRequestException("密码错误");
+//        }
+//        VerificationCode verificationCode = new VerificationCode(code, YshopConstant.RESET_MAIL,"email",user.getEmail());
+//        verificationCodeService.validated(verificationCode);
+//        userService.updateEmail(userDto.getUsername(),user.getEmail());
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     /**
      * 如果当前用户的角色级别低于创建用户的角色级别，则抛出权限不足的错误
